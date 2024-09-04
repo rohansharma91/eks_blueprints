@@ -110,4 +110,4 @@ module "eks_blueprints_kubernetes_addons" {
       add_on_application = false
     }
   }
-
+}
