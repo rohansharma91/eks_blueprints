@@ -110,16 +110,12 @@ module "eks_blueprints_kubernetes_addons" {
       add_on_application = false
     }
 }
-enable_aws_load_balancer_controller = true
-  aws_load_balancer_controller_helm_config = {
-    name       = "aws-load-balancer-controller"
-    chart      = "aws-load-balancer-controller"
-    repository = "https://aws.github.io/eks-charts"
-    version    = "1.3.1"
-    namespace  = "kube-system"
-    values = [templatefile("${path.module}/static/nginx_values.yaml", { 
-        operating_system = "linux"
-    })]
+ enable_aws_load_balancer_controller = true
+  enable_ingress_nginx = true
+  ingress_nginx_helm_config = {
+    version   = "4.0.17"
+    values    = [templatefile("${path.module}/static/nginx_values.yaml", {})]
+    
   }
 
   enable_aws_for_fluentbit            = false
