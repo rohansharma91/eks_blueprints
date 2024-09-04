@@ -58,4 +58,6 @@ data "aws_region" "current" {}
 #data "aws_acm_certificate" "issued" {
  # domain   = "lkravi.me"
   #statuses = ["ISSUED"]
+ }
 }
+
