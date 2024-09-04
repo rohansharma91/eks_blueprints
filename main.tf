@@ -13,7 +13,7 @@ module "eks_blueprints" {
   cluster_name       = local.cluster_name
   cluster_version    = "1.28"
   vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.public_subnets
+  private_subnet_ids = module.vpc.private_subnets
 
   # EKS MANAGED NODE GROUPS
   managed_node_groups = {
@@ -22,7 +22,7 @@ module "eks_blueprints" {
       instance_types  = ["t2.large"]
       min_size        = 2
       max_size        = 3
-      subnet_ids      = module.vpc.private_subnets
+      subnet_ids      = module.vpc.public_subnets
     }
   }
 
