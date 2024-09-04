@@ -16,14 +16,7 @@ terraform {
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
-    }
-  }
-
-  backend "s3" {
-    bucket         = "terraform-state-202208"
-    key            = "eks-bp-demo/state.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-state-lock"
+   
   }
 
 }
