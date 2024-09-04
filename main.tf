@@ -19,9 +19,9 @@ module "eks_blueprints" {
   managed_node_groups = {
     mg_m5 = {
       node_group_name = "managed-ondemand"
-      instance_types  = ["m5.large"]
+      instance_types  = ["m2.large"]
       min_size        = 2
-      max_size        = 4
+      max_size        = 3
       subnet_ids      = module.vpc.private_subnets
     }
   }
@@ -41,10 +41,10 @@ module "eks_blueprints" {
         "environment" = "dev"
       }
       "quota" = {
-        "requests.cpu"    = "1000m",
-        "requests.memory" = "4Gi",
-        "limits.cpu"      = "2000m",
-        "limits.memory"   = "8Gi",
+        "requests.cpu"    = "500m",
+        "requests.memory" = "2Gi",
+        "limits.cpu"      = "1000m",
+        "limits.memory"   = "3Gi",
         "pods"            = "10",
         "secrets"         = "10",
         "services"        = "10"
@@ -122,14 +122,14 @@ module "eks_blueprints_kubernetes_addons" {
     ssl_cert_arn  = data.aws_acm_certificate.issued.arn
   }
 
-  enable_aws_for_fluentbit            = true
+  enable_aws_for_fluentbit            = false
   enable_cluster_autoscaler           = true
   enable_metrics_server               = true
-  enable_prometheus                   = true
-  enable_grafana                      = true
+  enable_prometheus                   = false
+  enable_grafana                      = false
   enable_external_secrets             = true
   enable_aws_efs_csi_driver           = true
-  enable_aws_cloudwatch_metrics       = true
+  enable_aws_cloudwatch_metrics       = false
   #endregion
 
   depends_on = [
