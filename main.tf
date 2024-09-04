@@ -106,7 +106,7 @@ module "eks_blueprints_kubernetes_addons" {
     }
     workloads-dev = {
       path               = "newfolder"
-      repo_url           = "https://github.com/rohansharma91/argocddeployment.git"
+      repo_url           = "https://github.com/rohansharma91/eks_blueprints_workloads.git"
       add_on_application = false
     }
   }
