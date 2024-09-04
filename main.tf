@@ -67,7 +67,7 @@ resource "time_sleep" "wait_for_cluster" {
     "always_run" = timestamp()
   }
 }
-
+}
 #region ADDONS
 module "eks_blueprints_kubernetes_addons" {
   source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.8.0"
