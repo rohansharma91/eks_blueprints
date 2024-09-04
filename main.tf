@@ -78,7 +78,7 @@ module "eks_blueprints_kubernetes_addons" {
   enable_amazon_eks_coredns = true
   amazon_eks_coredns_config = {
     most_recent        = true
-    kubernetes_version = "1.22"
+    kubernetes_version = "1.28"
     resolve_conflicts  = "OVERWRITE"
   }
   enable_amazon_eks_kube_proxy         = true
