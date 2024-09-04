@@ -68,3 +68,47 @@ resource "time_sleep" "wait_for_cluster" {
   }
 }
 
+#region ADDONS
+module "eks_blueprints_kubernetes_addons" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.8.0"
+
+  eks_cluster_id = module.eks_blueprints.eks_cluster_id
+
+  #region EKS ADDONS
+  enable_amazon_eks_vpc_cni = true
+  enable_amazon_eks_coredns = true
+  amazon_eks_coredns_config = {
+    most_recent        = true
+    kubernetes_version = "1.22"
+    resolve_conflicts  = "OVERWRITE"
+  }
+  enable_amazon_eks_kube_proxy         = true
+  enable_amazon_eks_aws_ebs_csi_driver = true
+  #endregion
+
+  #region K8s ADDONS
+  enable_argocd = true
+
+  argocd_helm_config = {
+    set_sensitive = [
+      {
+        name  = "configs.secret.argocdServerAdminPassword"
+        value = bcrypt(data.aws_secretsmanager_secret_version.admin_password_version.secret_string)
+      }
+    ]
+  }
+
+  argocd_manage_add_ons = true # Indicates that ArgoCD is responsible for managing/deploying add-ons
+  argocd_applications = {
+    addons = {
+      path               = "chart"
+      repo_url           = "https://github.com/aws-samples/eks-blueprints-add-ons.git"
+      add_on_application = true
+    }
+    workloads-dev = {
+      path               = "argocd-apps/dev"
+      repo_url           = "https://github.com/lkravi/eks_blueprints_workloads"
+      add_on_application = false
+    }
+  }
+
