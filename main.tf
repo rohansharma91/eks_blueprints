@@ -19,7 +19,7 @@ module "eks_blueprints" {
   managed_node_groups = {
     mg_m5 = {
       node_group_name = "managed-ondemand"
-      instance_types  = ["t2.large"]
+      instance_types  = ["t2.small"]
       min_size        = 2
       max_size        = 3
       subnet_ids      = module.vpc.private_subnets
@@ -41,10 +41,10 @@ module "eks_blueprints" {
         "environment" = "dev"
       }
       "quota" = {
-        "requests.cpu"    = "500m",
-        "requests.memory" = "2Gi",
-        "limits.cpu"      = "1000m",
-        "limits.memory"   = "3Gi",
+        "requests.cpu"    = "250m",
+        "requests.memory" = "1Gi",
+        "limits.cpu"      = "500m",
+        "limits.memory"   = "2Gi",
         "pods"            = "10",
         "secrets"         = "10",
         "services"        = "10"
