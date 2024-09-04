@@ -109,5 +109,31 @@ module "eks_blueprints_kubernetes_addons" {
       repo_url           = "https://github.com/rohansharma91/eks_blueprints_workloads.git"
       add_on_application = false
     }
-  }
 }
+enable_aws_load_balancer_controller = true
+  aws_load_balancer_controller_helm_config = {
+    name       = "aws-load-balancer-controller"
+    chart      = "aws-load-balancer-controller"
+    repository = "https://aws.github.io/eks-charts"
+    version    = "1.3.1"
+    namespace  = "kube-system"
+    values = [templatefile("${path.module}/values.yaml", { 
+        operating_system = "linux"
+    })]
+  }
+
+  enable_aws_for_fluentbit            = false
+  enable_cluster_autoscaler           = true
+  enable_metrics_server               = true
+  enable_prometheus                   = false
+  enable_grafana                      = false
+  enable_external_secrets             = true
+  enable_aws_efs_csi_driver           = false
+  enable_aws_cloudwatch_metrics       = false
+  #endregion
+
+  depends_on = [
+    time_sleep.wait_for_cluster
+  ]
+}
+#endregion
