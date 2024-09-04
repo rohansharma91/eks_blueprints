@@ -22,7 +22,7 @@ module "eks_blueprints" {
       instance_types  = ["t2.large"]
       min_size        = 2
       max_size        = 3
-      subnet_ids      = module.vpc.public_subnets
+      subnet_ids      = module.vpc.private_subnets
     }
   }
 
