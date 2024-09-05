@@ -81,7 +81,7 @@ module "kubernetes_addons" {
 
   # Self-managed Add-ons
   enable_aws_for_fluentbit            = false
-  enable_aws_load_balancer_controller = true
+  enable_aws_load_balancer_controller = false
   enable_aws_efs_csi_driver           = false
   enable_cluster_autoscaler           = false
   enable_metrics_server               = false
