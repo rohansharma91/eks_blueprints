@@ -68,21 +68,45 @@ resource "time_sleep" "wait_for_cluster" {
   }
 }
 
-module "kubernetes_addons" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.0.2"
+module "eks_blueprints_kubernetes_addons" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.8.0"
 
   eks_cluster_id = module.eks_blueprints.eks_cluster_id
 
-  # EKS Add-ons
-  enable_amazon_eks_vpc_cni            = true
-  enable_amazon_eks_coredns            = true
+  #region EKS ADDONS
+  enable_amazon_eks_vpc_cni = true
+  enable_amazon_eks_coredns = true
+  amazon_eks_coredns_config = {
+    most_recent        = true
+    kubernetes_version = "1.30"
+    resolve_conflicts  = "OVERWRITE"
+  }
   enable_amazon_eks_kube_proxy         = true
   enable_amazon_eks_aws_ebs_csi_driver = true
+  #endregion
 
-  # Self-managed Add-ons
+  #region K8s ADDONS
+  enable_argocd = false
+
+  
+
+  # ingress
+  enable_aws_load_balancer_controller = true
+  
+  }
+
   enable_aws_for_fluentbit            = false
-  enable_aws_load_balancer_controller = false
-  enable_aws_efs_csi_driver           = false
   enable_cluster_autoscaler           = false
   enable_metrics_server               = false
+  enable_prometheus                   = false
+  enable_grafana                      = false
+  enable_external_secrets             = false
+  enable_aws_efs_csi_driver           = false
+  enable_aws_cloudwatch_metrics       = false
+  #endregion
+
+  depends_on = [
+    time_sleep.wait_for_cluster
+  ]
 }
+#endregion
