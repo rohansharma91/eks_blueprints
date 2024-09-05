@@ -111,10 +111,7 @@ module "eks_blueprints_kubernetes_addons" {
     }
 }
  enable_aws_load_balancer_controller = true
-  enable_ingress_nginx = true
-  ingress_nginx_helm_config = {
-    version   = "4.0.17"
-    values    = [templatefile("${path.module}/static/nginx_values.yaml", {})]
+  
     
   }
 
