@@ -11,7 +11,7 @@ module "eks_blueprints" {
 
   # EKS CLUSTER
   cluster_name       = local.cluster_name
-  cluster_version    = "1.28"
+  cluster_version    = "1.30"
   vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnets
 
@@ -78,7 +78,7 @@ module "eks_blueprints_kubernetes_addons" {
   enable_amazon_eks_coredns = true
   amazon_eks_coredns_config = {
     most_recent        = true
-    kubernetes_version = "1.28"
+    kubernetes_version = "1.30"
     resolve_conflicts  = "OVERWRITE"
   }
   enable_amazon_eks_kube_proxy         = true
