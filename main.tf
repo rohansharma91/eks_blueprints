@@ -92,4 +92,5 @@ module "kubernetes_addons" {
   enable_karpenter = false
    
   }
+}
 
