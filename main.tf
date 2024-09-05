@@ -20,8 +20,8 @@ module "eks_blueprints" {
     mg_m5 = {
       node_group_name = "managed-ondemand"
       instance_types  = ["t2.small"]
-      min_size        = 2
-      max_size        = 3
+      min_size        = 1
+      max_size        = 2
       subnet_ids      = module.vpc.private_subnets
     }
   }
@@ -68,66 +68,41 @@ resource "time_sleep" "wait_for_cluster" {
   }
 }
 #region ADDONS
-module "eks_blueprints_kubernetes_addons" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.8.0"
+module "kubernetes_addons" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.25.0"
 
   eks_cluster_id = module.eks_blueprints.eks_cluster_id
 
-  #region EKS ADDONS
-  enable_amazon_eks_vpc_cni = true
-  enable_amazon_eks_coredns = true
-  amazon_eks_coredns_config = {
-    most_recent        = true
-    kubernetes_version = "1.30"
-    resolve_conflicts  = "OVERWRITE"
-  }
-  enable_amazon_eks_kube_proxy         = true
+  # EKS Add-ons
   enable_amazon_eks_aws_ebs_csi_driver = true
-  #endregion
 
-  #region K8s ADDONS
-  enable_argocd = true
+  # Self-managed Add-ons
+  enable_aws_efs_csi_driver = false
 
-  argocd_helm_config = {
-    set_sensitive = [
-      {
-        name  = "configs.secret.argocdServerAdminPassword"
-        value = bcrypt(data.aws_secretsmanager_secret_version.admin_password_version.secret_string)
-      }
-    ]
+ 
   }
 
-  argocd_manage_add_ons = true # Indicates that ArgoCD is responsible for managing/deploying add-ons
-  argocd_applications = {
-    addons = {
-      path               = "chart"
-      repo_url           = "https://github.com/aws-samples/eks-blueprints-add-ons.git"
-      add_on_application = true
-    }
-    workloads-dev = {
-      path               = "argocd-apps/dev"
-      repo_url           = "https://github.com/rohansharma91/eks_blueprints_workloads.git"
-      add_on_application = false
-    }
+  enable_aws_load_balancer_controller = true
+
+  enable_metrics_server = false
+  enable_cert_manager   = false
+
+  # enable_cluster_autoscaler = true
+
+  enable_karpenter = false
+  
+  }
 }
 
- enable_aws_load_balancer_controller = true
-  
-    
-  
+provider "helm" {
+  kubernetes {
+    host                   = module.eks_blueprints.eks_cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks_blueprints.eks_cluster_certificate_authority_data)
 
-  enable_aws_for_fluentbit            = false
-  enable_cluster_autoscaler           = true
-  enable_metrics_server               = true
-  enable_prometheus                   = false
-  enable_grafana                      = false
-  enable_external_secrets             = true
-  enable_aws_efs_csi_driver           = false
-  enable_aws_cloudwatch_metrics       = false
-  #endregion
-
-  depends_on = [
-    time_sleep.wait_for_cluster
-  ]
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command     = "aws"
+      args        = ["eks", "get-token", "--cluster-name", module.eks_blueprints.eks_cluster_id]
+    }
+  }
 }
-#endregion
