@@ -72,10 +72,8 @@ module "eks_blueprints_addons" {
   source = "aws-ia/eks-blueprints-addons/aws"
   version = "1.16.3"
 
-  cluster_name      = module.eks_blueprints.cluster_name
-  cluster_endpoint  = module.eks_blueprints.cluster_endpoint
-  cluster_version   = module.eks_blueprints.cluster_version
-  oidc_provider_arn = module.eks_blueprints.oidc_provider_arn
+  
+  eks_cluster_id = module.eks_blueprints.eks_cluster_id
 
   eks_addons = {
     aws-ebs-csi-driver = {
