@@ -90,6 +90,7 @@ module "kubernetes_addons" {
   # enable_cluster_autoscaler = true
 
   enable_karpenter = false
+   }
  }
 }
 
