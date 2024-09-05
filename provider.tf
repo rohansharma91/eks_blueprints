@@ -43,7 +43,7 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", module.eks_blueprints.eks_cluster_id]
   }
 }
-
+}
 provider "kubectl" {
   host                   = module.eks_blueprints.eks_cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks_blueprints.eks_cluster_certificate_authority_data)
