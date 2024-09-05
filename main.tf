@@ -80,7 +80,6 @@ module "kubernetes_addons" {
   enable_aws_efs_csi_driver = false
 
  
-  }
 
   enable_aws_load_balancer_controller = true
 
