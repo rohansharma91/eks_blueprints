@@ -67,43 +67,41 @@ resource "time_sleep" "wait_for_cluster" {
     "always_run" = timestamp()
   }
 }
-#region ADDONS
-module "kubernetes_addons" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.25.0"
 
-  eks_cluster_id = module.eks_blueprints.eks_cluster_id
+module "eks_blueprints_addons" {
+  source = "aws-ia/eks-blueprints-addons/aws"
+  version = "1.16.3"
 
-  # EKS Add-ons
-  enable_amazon_eks_aws_ebs_csi_driver = true
+  cluster_name      = module.eks_blueprints.cluster_name
+  cluster_endpoint  = module.eks_blueprints.cluster_endpoint
+  cluster_version   = module.eks_blueprints.cluster_version
+  oidc_provider_arn = module.eks_blueprints.oidc_provider_arn
 
-  # Self-managed Add-ons
-  enable_aws_efs_csi_driver = false
-
- 
-
-  enable_aws_load_balancer_controller = true
-
-  enable_metrics_server = false
-  enable_cert_manager   = false
-
-  # enable_cluster_autoscaler = true
-
-  enable_karpenter = false
-   
-  
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = module.eks_blueprints.eks_cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks_blueprints.eks_cluster_certificate_authority_data)
-
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      command     = "aws"
-      args        = ["eks", "get-token", "--cluster-name", module.eks_blueprints.eks_cluster_id]
+  eks_addons = {
+    aws-ebs-csi-driver = {
+      most_recent = false
+    }
+    coredns = {
+      most_recent = true
+    }
+    vpc-cni = {
+      most_recent = true
+    }
+    kube-proxy = {
+      most_recent = true
     }
   }
+
+  enable_aws_load_balancer_controller    = true
+  enable_cluster_proportional_autoscaler = false
+  enable_karpenter                       = false
+  enable_kube_prometheus_stack           = false
+  enable_metrics_server                  = false
+  enable_external_dns                    = true
+  enable_cert_manager                    = false
+  
+
+  tags = {
+    Environment = "dev"
+  }
 }
-
-
