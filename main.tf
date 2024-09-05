@@ -113,7 +113,7 @@ module "eks_blueprints_kubernetes_addons" {
  enable_aws_load_balancer_controller = true
   
     
-  }
+  
 
   enable_aws_for_fluentbit            = false
   enable_cluster_autoscaler           = true
@@ -128,5 +128,5 @@ module "eks_blueprints_kubernetes_addons" {
   depends_on = [
     time_sleep.wait_for_cluster
   ]
-
+}
 #endregion
