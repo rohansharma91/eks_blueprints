@@ -109,6 +109,4 @@ module "eks_blueprints_kubernetes_addons" {
     time_sleep.wait_for_cluster
   ]
 
- }
-}
 #endregion
