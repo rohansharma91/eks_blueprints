@@ -110,6 +110,7 @@ module "eks_blueprints_kubernetes_addons" {
       add_on_application = false
     }
 }
+{
  enable_aws_load_balancer_controller = true
   
     
