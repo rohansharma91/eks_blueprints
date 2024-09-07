@@ -81,9 +81,9 @@ module "eks_blueprints_kubernetes_addons" {
 
   #K8s Add-ons
   enable_argocd                       = true
-  enable_aws_for_fluentbit            = true
+  enable_aws_for_fluentbit            = false
   enable_aws_load_balancer_controller = true
-  enable_cluster_autoscaler           = true
-  enable_metrics_server               = true
-  enable_prometheus                   = true
+  enable_cluster_autoscaler           = false
+  enable_metrics_server               = false
+  enable_prometheus                   = false
 }
